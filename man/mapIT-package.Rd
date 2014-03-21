@@ -12,7 +12,7 @@ Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 \tabular{ll}{
 Package: \tab mapIT\cr
 Type: \tab Package\cr
-Version: \tab 0.1.2\cr
+Version: \tab 0.1.3\cr
 Date: \tab 2014-03-21\cr
 License: \tab LGPL-3\cr
 }

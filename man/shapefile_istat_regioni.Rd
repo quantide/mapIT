@@ -15,7 +15,7 @@ Geometrie per disegnare le regioni italiane fornite da ISTAT.
 }
 
 \details{
-Dati aggiornati al 1° gennaio 2011.
+Dati aggiornati al 1 gennaio 2011.
 
 Rilasciati sotto licenza Creative Commons - Attribuzione - versione 3.0. Per maggiori dettagli sulla licenza: http://creativecommons.org/licenses/by/3.0/it/
 }

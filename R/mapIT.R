@@ -1,12 +1,6 @@
 ############################################################
 ### mapIT() function
-# Authors: Davide Massidda and Nicola Sturaro
-# Date: Mar 14, 2014
-# Version: 0.1.2
-# Requires: ggplot2
-# License: GPLv3
-
-# The function draws a map of Italy
+# See map/mapIT.Rd for further information
 ############################################################
 
 mapIT <- function(
