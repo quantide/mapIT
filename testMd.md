@@ -1,3 +1,0 @@
-# MD di prova
-
-ciao
