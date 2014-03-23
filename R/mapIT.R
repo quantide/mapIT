@@ -19,7 +19,7 @@ mapIT <- function(
     legendTitle = guide.label
   ) 
 ) {
-      
+  
   ### Check inputs
   if(is.null(id)) {
     warning("id not provided. values assigned by order")
@@ -98,7 +98,11 @@ mapIT <- function(
   
   
   ### If dataSource is a string load data
-  if(class(dataSource) == "character" & dataSource == "istat" & detail == "regions") {data(shapefile_istat_regioni); shapedata = shapedata_istat_regioni}
+  if(class(dataSource) == "character" & dataSource == "istat" & detail == "regions") {
+    shapedata_istat_regioni <- NULL # avoid note in R CMD check
+    data("shapefile_istat_regioni", envir = environment())
+    shapedata = shapedata_istat_regioni
+  }
   
   
   ### Match region ID or names
