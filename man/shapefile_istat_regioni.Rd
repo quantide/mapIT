@@ -1,5 +1,6 @@
 \name{shapefile_istat_regioni}
 \alias{shapefile_istat_regioni}
+\alias{shapedata_istat_regioni}
 \docType{data}
 
 \title{Shape Data of Italian Regions by ISTAT}

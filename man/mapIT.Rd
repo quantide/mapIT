@@ -1,14 +1,14 @@
-\name{mapiT}
-\alias{mapiT}
+\name{mapIT}
+\alias{mapIT}
 
-\title{Choropleth Maps of italy}
+\title{Choropleth Maps of Italy}
 
 \description{
 Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 }
 
 \usage{
-mapiT(values, id = NULL, data = NULL, detail = "regions", dataSource = "istat", sub = NULL, guide.label = deparse(substitute(values)), graphPar = list(low = "#f0f0f0", high = "#005096", title = NULL, theme = theme_minimal(), themeOption = list(title = element_text(size = 18), axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank()), borderCol = "black", show_guide = TRUE, legendTitle = guide.label))
+mapIT(values, id = NULL, data = NULL, detail = "regions", dataSource = "istat", sub = NULL, discrete = ifelse(is.numeric(values), FALSE, TRUE), guide.label = deparse(substitute(values)), graphPar = list(low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL, title = NULL, theme = theme_minimal(), themeOption = list(title = element_text(size = 18), axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank()), borderCol = "black", show_guide = TRUE, legendTitle = guide.label))
 }
 
 \arguments{
@@ -27,6 +27,9 @@ Fonte dei dati. Se uguale ad '\code{istat}' (default), vengono usati i dati forn
 }
   \item{sub}{
  Correntemente ignorato. Per future estensioni.
+}
+  \item{discrete}{
+ Considera valori numerici come fattori.
 }
   \item{guide.label}{
 Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.
@@ -74,7 +77,7 @@ Nicola Sturaro Sommacal [aut, cre], Davide Massidda [aut], Lorenzo Di Blasio [ct
 values = runif(20, min = 0, max = 1000)       
 
 # funzione minimale per creare la mappa
-mapiT(values = values)
+mapIT(values = values)
 
 # crea id regionali
 # e' indifferente usare maiuscole e minuscole
@@ -82,27 +85,27 @@ mapiT(values = values)
 id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'LiGURiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 
 # crea la mappa
-mapiT(values = values, id = id, guide.label = "Valori")
+mapIT(values = values, id = id, guide.label = "Valori")
 
 # modifica i colori
-mapiT(values = values, id = id, guide.label = "Valori", graphPar = list(low = "#00ff00", high = "#ff0000"))
+mapIT(values = values, id = id, guide.label = "Valori", graphPar = list(low = "#00ff00", high = "#ff0000"))
 
 ### utilizza dati categoriali
 values = c(rep("Nord-Ovest", 4), rep("Nord-Est", 4), rep("Centro", 4), rep("Sud", 6), rep("isole", 2))
 id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'LiGURiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 
 # funzione minimale per creare la mappa
-mapiT(values = values, id = id, guide.label = "Valori")
+mapIT(values = values, id = id, guide.label = "Valori")
 
 # aggiungi i colori alle mappe
-mapiT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(colours = c("red", "darkblue", "green", "yellow", "purple")))
+mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(colours = c("red", "darkblue", "green", "yellow", "purple")))
 
 # utilizzando i set di colori predefiniti, si ottiene un risultato migliore
-mapiT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(palette = "Dark2"))
+mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(palette = "Dark2"))
 
 # modificando i dati affinche' le macroaree siano un fattore ordinato, si ottiene una legenda e una colorazione piu' coerente
 values = factor(values, levels = c("Nord-Ovest", "Nord-Est", "Centro", "Sud", "isole"), ordered=TRUE)
-mapiT(values = values, id = id, guide.label = "Aree geografiche")
+mapIT(values = values, id = id, guide.label = "Aree geografiche")
 
 }
 

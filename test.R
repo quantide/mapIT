@@ -18,6 +18,20 @@ id = c('Piemonte', 'VALLE D\'AOSTA', 'lOMBARDIA', 'TRENTINO-ALTO ADIGE', 'VENETO
 df = data.frame(values3=values, id3=id)
 
 source('~/Dropbox/git/dev/mapIT/R/mapIT.R')
+
+library(mapIT)
+
+
+
+
+
+
+library(mapIT)
+
+values = runif(20,min=0,max=1000)          # crea dati sintetici
+id = c('Piemonte', 'VALLE D\'AOSTA', 'lOMBARDIA', 'TRENTINO-ALTO ADIGE', 'VENETO', 'FRIULI-VENEZIA GIULIA', 'LIGURIA', 'EMILIA-ROMAGNA', 'TOSCANA', 'UMBRIA', 'MARCHE', 'LAZIO', 'ABRUZZO', 'MOLISE', 'CAMPANIA', 'PUGLIA', 'BASILICATA', 'CALABRIA', 'SICILIA', 'SARDEGNA')
+
+
 mapIT(values=values, id=id, guide.label="Aree geografiche")
 mapIT(values=values, id=id, guide.label="Aree geografiche", graphPar = list(colours = c("red", "darkblue", "green", "yellow", "purple")))
 
