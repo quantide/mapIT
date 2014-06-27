@@ -117,19 +117,20 @@ mapIT <- function(
   
   ### Select 'sub' regions
   ### TODO
-#   if (!is.null(sub)) {
-#     if(is.numeric(id)) {
-#       posSub <- match(shapedata$id, as.character(sub))
-#       ckSub <- match(as.character(sub), shapedata$id)
-#       shapedata <- shapedata[shapedata$id %in% as.character(sub), ]
-#       values <- values[id %in% as.character(sub)]
-#     } else { 
-#       posSub <- match(onlyChar(shapedata$region), onlyChar(sub))
-#       ckSub <- match(onlyChar(sub), onlyChar(shapedata$region))
-#       shapedata <- shapedata[onlyChar(shapedata$region) %in% onlyChar(sub), ]
-#       values <- values[id %in% onlyChar(sub)]
-#     }  
-#   }
+   if (!is.null(sub)) {
+     if(is.numeric(id)) {
+       posSub <- match(shapedata$id, as.character(sub))
+       ckSub <- match(as.character(sub), shapedata$id)
+       shapedata <- shapedata[shapedata$id %in% as.character(sub), ]
+       values <- values[id %in% as.character(sub)]
+     } else { 
+       posSub <- match(onlyChar(shapedata$region), onlyChar(sub))
+       ckSub <- match(onlyChar(sub), onlyChar(shapedata$region))
+       shapedata <- shapedata[onlyChar(shapedata$region) %in% onlyChar(sub), ]
+       values <- values[id %in% onlyChar(sub)]
+     }
+     pos <- posSub[which(!is.na(posSub))]
+   }
   
 #  if(sum(is.na(posSub)) > 0) {
 #    warning(paste("Some 'sub' not recognized:", paste(id[is.na(ckSub)], collapse = ", ")))
@@ -170,5 +171,3 @@ mapIT <- function(
   
   return(out)
 }
-
-
