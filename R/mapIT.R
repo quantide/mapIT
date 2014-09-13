@@ -26,6 +26,7 @@ mapIT <- function(
   }  
   if(detail != "regions") {
     warning("the argument 'detail' is currently ignored")
+    detail <- "regions"
   }
   if(class(dataSource) == "character") {
     if (dataSource != "istat") {
