@@ -26,10 +26,10 @@ Dettaglio con cui disegnare la mappa. Aggiunto per future estensioni, attualment
 Fonte dei dati. Se uguale ad '\code{istat}' (default), vengono usati i dati forniti dall'iSTAT e contenuti nel package. Altrimenti un data.frame con la stessa struttura dei dati iSTAT puo' essere utilizzato. 
 }
   \item{sub}{
- Correntemente ignorato. Per future estensioni.
+Consente di produrre una mappa di alcune aree selezionate e non di tutta l'Italia.
 }
   \item{discrete}{
- Considera valori numerici come fattori.
+Considera valori numerici come fattori.
 }
   \item{guide.label}{
 Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.
@@ -78,6 +78,9 @@ values = runif(20, min = 0, max = 1000)
 
 # funzione minimale per creare la mappa
 mapIT(values = values)
+
+# crea una mappa per la sola area centro-settentrionale:
+mapIT(values,sub=0:12)
 
 # crea id regionali
 # e' indifferente usare maiuscole e minuscole

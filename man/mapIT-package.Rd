@@ -12,8 +12,8 @@ Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 \tabular{ll}{
 Package: \tab mapIT\cr
 Type: \tab Package\cr
-Version: \tab 0.1.4\cr
-Date: \tab 2014-03-22\cr
+Version: \tab 0.1.5\cr
+Date: \tab 2014-09-13\cr
 License: \tab LGPL-3\cr
 }
 }

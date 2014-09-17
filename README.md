@@ -29,5 +29,3 @@ In maniera immediata, è possibile creare una mappa usando la funzione `mapIT()`
 
 ## Miglioramenti previsti
  - caricamento di altri shapefile per creare mappe con dettaglio maggiore.
- - utilizzo dell'argomento `sub` per produrre una mappa di alcune aree e non di tutta l'Italia. 
-

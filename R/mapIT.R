@@ -25,7 +25,8 @@ mapIT <- function(
     warning("id not provided. values assigned by order")
   }  
   if(detail != "regions") {
-    warning("detail is currently ignored")
+    warning("the argument 'detail' is currently ignored")
+    detail <- "regions"
   }
   if(class(dataSource) == "character") {
     if (dataSource != "istat") {
@@ -39,9 +40,6 @@ mapIT <- function(
     if(detail != "regions") {
       warning("shapefile provided. detail is currently ignored")
     }
-  }  
-  if(! is.null(sub)) {
-    warning("detail is currently ignored")
   }
   if(! all(sort(names(graphPar)) %in% sort(names(eval(formals(sys.function(sys.parent()))$graphPar))))) {
     warning("additional arguments to graphPar ignored")
@@ -52,12 +50,10 @@ mapIT <- function(
     }
   }
   
-  
   ### Remove all non alphanumeric characters from region names and transform to lower case
   onlyChar <- function(string) {
     tolower(gsub(" ", "", gsub("[^[:alnum:]]", " ", string)))
   }
-
   
   ### Update lists elements (and keep default when argument is not passed)
   listDefTO = eval(formals(sys.function(sys.parent()))$graphPar$themeOption)
@@ -68,7 +64,6 @@ mapIT <- function(
   
   graphPar = listDef
   graphPar$themeOption = listDefTO
-
   
   ### If data exists then search values and id as data columns
   if(!is.null(data)) {
@@ -79,23 +74,18 @@ mapIT <- function(
   ### Transform values to factor
   if(discrete == TRUE) {values = as.factor(values)}
   
-  
   ### If id is null then assign numbers from 0
   if(is.null(id)) {id = 0:(length(values)-1)}
-  
   
   ### If guide.label contains $, keep the second part
   if(grepl("\\$", guide.label))
     guide.label <- unlist(strsplit(guide.label, "\\$"))[2]
   
-  
   ### If guide.label contain non alphanumeric characters, remove them
   guide.label <- onlyChar(guide.label)
-    
   
   ### If dataSource is a dataframe use it
   if(class(dataSource) == "data.frame") {shapedata = dataSource}
-  
   
   ### If dataSource is a string load data
   if(class(dataSource) == "character" & dataSource == "istat" & detail == "regions") {
@@ -103,7 +93,6 @@ mapIT <- function(
     data("shapefile_istat_regioni", envir = environment())
     shapedata = shapedata_istat_regioni
   }
-  
   
   ### Match region ID or names
   if(is.numeric(id)) {
@@ -114,38 +103,31 @@ mapIT <- function(
     ck <- match(onlyChar(id), onlyChar(shapedata$region))
   }
   
-  
   ### Select 'sub' regions
   ### TODO
-#   if (!is.null(sub)) {
-#     if(is.numeric(id)) {
-#       posSub <- match(shapedata$id, as.character(sub))
-#       ckSub <- match(as.character(sub), shapedata$id)
-#       shapedata <- shapedata[shapedata$id %in% as.character(sub), ]
-#       values <- values[id %in% as.character(sub)]
-#     } else { 
-#       posSub <- match(onlyChar(shapedata$region), onlyChar(sub))
-#       ckSub <- match(onlyChar(sub), onlyChar(shapedata$region))
-#       shapedata <- shapedata[onlyChar(shapedata$region) %in% onlyChar(sub), ]
-#       values <- values[id %in% onlyChar(sub)]
-#     }  
-#   }
-  
-#  if(sum(is.na(posSub)) > 0) {
-#    warning(paste("Some 'sub' not recognized:", paste(id[is.na(ckSub)], collapse = ", ")))
-#  }
-
+   if (!is.null(sub)) {
+     if(is.numeric(id)) {
+       posSub <- match(shapedata$id, as.character(sub))
+       ckSub <- match(as.character(sub), shapedata$id)
+       shapedata <- shapedata[shapedata$id %in% as.character(sub), ]
+       values <- values[id %in% as.character(sub)]
+     } else { 
+       posSub <- match(onlyChar(shapedata$region), onlyChar(sub))
+       ckSub <- match(onlyChar(sub), onlyChar(shapedata$region))
+       shapedata <- shapedata[onlyChar(shapedata$region) %in% onlyChar(sub), ]
+       values <- values[id %in% onlyChar(sub)]
+     }
+     pos <- posSub[which(!is.na(posSub))]
+   }
 
   ### Check if some region ID or name is not matched
   if(sum(is.na(pos)) > 0) {
     warning(paste("Some ID not recognized:", paste(id[is.na(ck)], collapse = ", ")))
   }
-
   
   ### Add values to shape data
   shapedata[, guide.label] <- values[pos]
   
-
   ### Plot building
   gp <- ggplot(shapedata, aes_string(x = "long", y = "lat"))
   bg <- graphPar$theme
@@ -170,5 +152,3 @@ mapIT <- function(
   
   return(out)
 }
-
-
