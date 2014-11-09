@@ -9,4 +9,3 @@ Description: Creazione di mappe delle regioni italiane in maniera semplice.
 Depends: R (>= 2.10)
 Imports: ggplot2
 License: LGPL-3
-Packaged: 2014-11-09 17:05:59 UTC; Davide Massidda
