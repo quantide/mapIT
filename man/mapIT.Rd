@@ -8,7 +8,18 @@ Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 }
 
 \usage{
-mapIT(values, id = NULL, data = NULL, detail = "regions", dataSource = "istat", sub = NULL, discrete = ifelse(is.numeric(values), FALSE, TRUE), guide.label = deparse(substitute(values)), graphPar = list(low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL, title = NULL, theme = theme_minimal(), themeOption = list(title = element_text(size = 18), axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y = element_blank()), borderCol = "black", show_guide = TRUE, legendTitle = guide.label))
+mapIT(values, id, data, detail = "regions", dataSource = "istat",
+    sub = NULL, discrete = NULL, guide.label = NULL, title = NULL,
+    graphPar = list(low = "#f0f0f0", high = "#005096", palette = "BuGn",
+        colours = NULL, theme = theme_minimal(),
+        themeOption = list(
+            title = element_text(size = 18),
+            axis.ticks = element_blank(), axis.text.x = element_blank(),
+            axis.text.y = element_blank()
+        ),
+        borderCol = "black", show_guide = TRUE
+    )
+)
 }
 
 \arguments{
@@ -34,6 +45,11 @@ Considera valori numerici come fattori.
   \item{guide.label}{
 Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.
 }
+
+  \item{title}{
+Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.
+}
+
   \item{graphPar}{
   
     \describe{
@@ -46,8 +62,6 @@ Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggett
     \item{\code{palette}}{solo se \code{values} assume valori discreti, tipo di palette RColorBrewer da utilizzare. Viene ignorato se \code{colours} non e' nullo. Per visualizzare tutte le palette disponibili, e' possibile utilizzare il comando \code{RColorBrewer::display.brewer.all()}  (default: 'BuGn')}
 
     \item{\code{colours}}{solo se \code{values} assume valori discreti, colore da associare a ciascun valore di 'values'. Se nullo (default), viene ignorato e utilizzata una palette.}
-    
-    \item{\code{title}}{titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.}
 
     \item{\code{theme}}{tema ggplot2 da utilizzare. (default: \code{\link{theme_minimal}()})}
     
@@ -58,8 +72,6 @@ Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggett
     \item{\code{borderCol}}{colore per i confini delle diverse aree. (default: '\code{black}')}
     
     \item{\code{show_guide}}{correntemente ignorato. Per future estensioni.}
-    
-    \item{\code{legendTitle}}{titolo della legenda. (default: \code{guide.label})}
     }
   }
 }
@@ -109,6 +121,5 @@ mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = lis
 # modificando i dati affinche' le macroaree siano un fattore ordinato, si ottiene una legenda e una colorazione piu' coerente
 values = factor(values, levels = c("Nord-Ovest", "Nord-Est", "Centro", "Sud", "isole"), ordered=TRUE)
 mapIT(values = values, id = id, guide.label = "Aree geografiche")
-
 }
 
