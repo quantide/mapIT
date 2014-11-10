@@ -18,7 +18,7 @@ install.packages("devtools")
 Una volta installato `devtools` si può installare mapIT:
 ```
 library(devtools)
-install_github("mapIT", "nicolasturaro")
+install_github("nicolasturaro/mapIT")
 ```
 
 

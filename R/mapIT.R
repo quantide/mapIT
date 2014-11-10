@@ -4,24 +4,19 @@
 ############################################################
 
 mapIT <- function(
-  values, id = NULL, data = NULL, detail = "regions", dataSource = "istat", sub = NULL,
-  discrete = ifelse(is.numeric(values), FALSE, TRUE),
-  guide.label = deparse(substitute(values)),
+  values, id, data, detail = "regions", dataSource = "istat", sub = NULL, discrete = NULL, guide.label = NULL, title = NULL,
   graphPar = list(
-    low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL,
-    title = NULL,
-    theme = theme_minimal(),
+    low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL, theme = theme_minimal(),
     themeOption = list(
       title = element_text(size = 18), axis.ticks = element_blank(),
       axis.text.x = element_blank(), axis.text.y = element_blank()
     ),
-    borderCol = "black", show_guide = TRUE,
-    legendTitle = guide.label
-  ) 
+    borderCol = "black", show_guide = TRUE
+  )
 ) {
-  
+
   ### Check inputs
-  if(is.null(id)) {
+  if(missing(id)) {
     warning("id not provided. values assigned by order")
   }  
   if(detail != "regions") {
@@ -65,27 +60,38 @@ mapIT <- function(
   graphPar = listDef
   graphPar$themeOption = listDefTO
   
+  ### If the label for the legend is unspecified
+  if(is.null(guide.label)) guide.label <- deparse(substitute(values))
+  
   ### If data exists then search values and id as data columns
-  if(!is.null(data)) {
-    values = data[, values]
-    if(!is.null(id)) {id = data[, id]}
+  if(!missing(data)) {
+    values <- data[,deparse(substitute(values))]
+    if(!missing(id)) id <- data[,deparse(substitute(id))]
   }
   
-  ### Transform values to factor
-  if(discrete == TRUE) {values = as.factor(values)}
+  ### If id is missing then assign numbers from 0
+  if(missing(id)) delayedAssign("id", 0:(length(values)-1))
   
-  ### If id is null then assign numbers from 0
-  if(is.null(id)) {id = 0:(length(values)-1)}
+  ### Transform values to factor
+  if(is.numeric(values)) {
+    discrete <- FALSE
+  } else {
+    discrete <- TRUE
+    values <- as.factor(values)
+  }
+  
+  ### If the data argument is unspecified
+  if(missing(data)) {
+    assign("data", data.frame(values,id))
+  }
   
   ### If guide.label contains $, keep the second part
-  if(grepl("\\$", guide.label))
+  if(grepl("\\$", guide.label)) {
     guide.label <- unlist(strsplit(guide.label, "\\$"))[2]
-  
-  ### If guide.label contain non alphanumeric characters, remove them
-  guide.label <- onlyChar(guide.label)
+  }
   
   ### If dataSource is a dataframe use it
-  if(class(dataSource) == "data.frame") {shapedata = dataSource}
+  if(class(dataSource) == "data.frame") shapedata = dataSource
   
   ### If dataSource is a string load data
   if(class(dataSource) == "character" & dataSource == "istat" & detail == "regions") {
@@ -126,29 +132,24 @@ mapIT <- function(
   }
   
   ### Add values to shape data
-  shapedata[, guide.label] <- values[pos]
+  shapedata[, "values"] <- values[pos]
   
   ### Plot building
   gp <- ggplot(shapedata, aes_string(x = "long", y = "lat"))
   bg <- graphPar$theme
   th <- do.call(theme, graphPar$themeOption)
-  sfc <- scale_fill_continuous(graphPar$legendTitle, low = graphPar$low, high = graphPar$high)
-  sfb <- scale_fill_brewer(graphPar$legendTitle, labels=levels(as.factor(values)), palette = graphPar$palette)
-  sfm <- scale_fill_manual(graphPar$legendTitle, values = graphPar$colours)
-  map <- geom_map(aes_string(map_id = "region", fill = guide.label), map = shapedata, col = graphPar$borderCol, show_guide = graphPar$show_guide)
-  lab <- labs(x = "", y = "", title=graphPar$title)
-  
+  map <- geom_map(aes_string(map_id = "region", fill = "values"), map = shapedata, col = graphPar$borderCol, show_guide = graphPar$show_guide)
+  lab <- labs(x = "", y = "", title=title)
   out <- gp + bg + th + map + lab
-  
   if(discrete == TRUE) {
     if(is.null(graphPar$colours)) {
-      out <- out + sfb
+      scf <- scale_fill_brewer(labels=levels(as.factor(values)), palette = graphPar$palette, name=guide.label)
     } else {
-      out <- out + sfm 
+      scf <- scale_fill_manual(values = graphPar$colours, name=guide.label)
     }
   } else {
-    out <- out + sfc
+      scf <- scale_fill_continuous(low = graphPar$low, high = graphPar$high, name=guide.label)
   }
   
-  return(out)
+  return(out+scf)
 }
