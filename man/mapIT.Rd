@@ -4,11 +4,11 @@
 \title{Choropleth Maps of Italy}
 \usage{
 mapIT(values, id, data, detail = "regions", dataSource = "istat",
-  sub = NULL, discrete = NULL, guide.label = NULL, title = NULL,
-  graphPar = list(low = "#f0f0f0", high = "#005096", palette = "BuGn", colours
-  = NULL, theme = theme_minimal(), themeOption = list(title = element_text(size
-  = 18), axis.ticks = element_blank(), axis.text.x = element_blank(),
-  axis.text.y = element_blank()), borderCol = "black", show_guide = TRUE))
+  sub = NULL, discrete = NULL, graphPar = list(guide.label = NULL, title =
+  NULL, low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL,
+  theme = theme_minimal(), themeOption = list(title = element_text(size = 18),
+  axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y =
+  element_blank()), borderCol = "black", show_guide = TRUE))
 }
 \arguments{
 \item{values}{Vettore numerico contenente i valori da associare a ciascuna regione. Puo' essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}.}
@@ -25,12 +25,11 @@ mapIT(values, id, data, detail = "regions", dataSource = "istat",
 
 \item{discrete}{Considera valori numerici come fattori.}
 
-\item{guide.label}{Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.}
-
-\item{title}{Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.}
-
 \item{graphPar}{\describe{
   Lista contenente i seguenti parametri grafici:
+
+  \item{\code{guide.label}}{Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.}
+  \item{\code{title}}{Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.}
   \item{\code{low}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' basso. (default: #F0F0F0)}
   \item{\code{high}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' alto. (default: #005096)}
   \item{\code{palette}}{solo se \code{values} assume valori discreti, tipo di palette RColorBrewer da utilizzare. Viene ignorato se \code{colours} non e' nullo. Per visualizzare tutte le palette disponibili, e' possibile utilizzare il comando \code{RColorBrewer::display.brewer.all()}  (default: 'BuGn')}

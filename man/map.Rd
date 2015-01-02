@@ -3,12 +3,12 @@
 \alias{map}
 \title{Easier choropleth maps}
 \usage{
-map(region = "Italy", ...)
+map(..., area = "Italy")
 }
 \arguments{
-\item{region}{The region for which the map should be drawn (currently only 'Italy')}
+\item{...}{Arguments for the called function}
 
-\item{...}{Arguments for the calle dfunction}
+\item{area}{The geographical area for which the map should be drawn (currently only 'Italy')}
 }
 \description{
 Easier choropleth maps
