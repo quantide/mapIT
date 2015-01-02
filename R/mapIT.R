@@ -14,10 +14,11 @@
 #' @param dataSource Fonte dei dati. Se uguale ad '\code{istat}' (default), vengono usati i dati forniti dall'iSTAT e contenuti nel package. Altrimenti un data.frame con la stessa struttura dei dati iSTAT puo' essere utilizzato. 
 #' @param sub Consente di produrre una mappa di alcune aree selezionate e non di tutta l'Italia.
 #' @param discrete Considera valori numerici come fattori.
-#' @param guide.label Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.
-#' @param title Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.
 #' @param graphPar \describe{
-#'   Lista contenente i seguenti parametri grafici:  
+#'   Lista contenente i seguenti parametri grafici: 
+#'   
+#'   \item{\code{guide.label}}{Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.}
+#'   \item{\code{title}}{Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.}
 #'   \item{\code{low}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' basso. (default: #F0F0F0)}
 #'   \item{\code{high}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' alto. (default: #005096)}                                                                                                                                              
 #'   \item{\code{palette}}{solo se \code{values} assume valori discreti, tipo di palette RColorBrewer da utilizzare. Viene ignorato se \code{colours} non e' nullo. Per visualizzare tutte le palette disponibili, e' possibile utilizzare il comando \code{RColorBrewer::display.brewer.all()}  (default: 'BuGn')}
@@ -74,8 +75,10 @@
 
 
 mapIT <- function(
-  values, id, data, detail = "regions", dataSource = "istat", sub = NULL, discrete = NULL, guide.label = NULL, title = NULL,
+  values, id, data, detail = "regions", dataSource = "istat", sub = NULL, 
+  discrete = NULL, 
   graphPar = list(
+    guide.label = NULL, title = NULL,
     low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL, theme = theme_minimal(),
     themeOption = list(
       title = element_text(size = 18), axis.ticks = element_blank(),
@@ -106,11 +109,11 @@ mapIT <- function(
       warning("shapefile provided. detail is currently ignored")
     }
   }
-  if(! all(sort(names(graphPar)) %in% sort(names(eval(formals(sys.function(sys.parent()))$graphPar))))) {
+  if(! all(sort(names(graphPar)) %in% sort(names(eval(formals(mapIT)$graphPar))))) {
     warning("additional arguments to graphPar ignored")
   }
   if(!is.null(graphPar$themeOption)) {
-    if(! all(sort(names(graphPar$themeOption)) %in% sort(names(eval(formals(sys.function(sys.parent()))$graphPar$themeOption))))) {
+    if(! all(sort(names(graphPar$themeOption)) %in% sort(names(eval(formals(mapIT)$graphPar$themeOption))))) {
       warning("additional arguments to themeOption ignored")
     }
   }
@@ -121,17 +124,17 @@ mapIT <- function(
   }
   
   ### Update lists elements (and keep default when argument is not passed)
-  listDefTO = eval(formals(sys.function(sys.parent()))$graphPar$themeOption)
+  listDefTO = eval(formals(mapIT)$graphPar$themeOption)
   if(!is.null(graphPar$themeOption)) {listDefTO[sort(names(listDefTO[sort(names(listDefTO)) %in% sort(names(graphPar$themeOption))]))] = graphPar$themeOption[sort(names(graphPar$themeOption))]}
     
-  listDef = eval(formals(sys.function(sys.parent()))$graphPar)
+  listDef = eval(formals(mapIT)$graphPar)
   listDef[sort(names(listDef[names(listDef) %in% names(graphPar)]))] = graphPar[sort(names(graphPar))]
   
   graphPar = listDef
   graphPar$themeOption = listDefTO
   
   ### If the label for the legend is not specified
-  if(is.null(guide.label)) guide.label <- deparse(substitute(values))
+  if(is.null(graphPar$guide.label)) graphPar$guide.label <- deparse(substitute(values))
   
   ### If data exists then search values and id as data columns
   if(!missing(data)) {
@@ -140,7 +143,7 @@ mapIT <- function(
   }
   
   ### If id is missing then assign numbers from 0
-  if(missing(id)) delayedAssign("id", 0:(length(values)-1))
+  if(missing(id)) {id <- 0:(length(values)-1)}
   
   ### Transform values to factor
   if(is.numeric(values)) {
@@ -156,8 +159,8 @@ mapIT <- function(
   }
   
   ### If guide.label contains $, keep the second part
-  if(grepl("\\$", guide.label)) {
-    guide.label <- unlist(strsplit(guide.label, "\\$"))[2]
+  if(grepl("\\$", graphPar$guide.label)) {
+    graphPar$guide.label <- unlist(strsplit(graphPar$guide.label, "\\$"))[2]
   }
   
   ### If dataSource is a dataframe use it
@@ -167,9 +170,7 @@ mapIT <- function(
   if(class(dataSource) == "character") {
     if(dataSource == "istat") {
       if(detail == "regions") {
-        shapedata_istat_regioni <- NULL # avoid note in R CMD check
-        data("shapefile_istat_regioni", envir = environment())
-        shapedata <- shapedata_istat_regioni
+        shapedata <- shapedata_istat_regioni # require LazyData in DESCRIPTION
       }
     }
   }
@@ -212,16 +213,16 @@ mapIT <- function(
   bg <- graphPar$theme
   th <- do.call(theme, graphPar$themeOption)
   map <- geom_map(aes_string(map_id = "region", fill = "values"), map = shapedata, col = graphPar$borderCol, show_guide = graphPar$show_guide)
-  lab <- labs(x = "", y = "", title=title)
+  lab <- labs(x = "", y = "", title=graphPar$title)
   out <- gp + bg + th + map + lab
   if(discrete == TRUE) {
     if(is.null(graphPar$colours)) {
-      scf <- scale_fill_brewer(labels=levels(as.factor(values)), palette = graphPar$palette, name=guide.label)
+      scf <- scale_fill_brewer(labels=levels(as.factor(values)), palette = graphPar$palette, name=graphPar$guide.label)
     } else {
-      scf <- scale_fill_manual(values = graphPar$colours, name=guide.label)
+      scf <- scale_fill_manual(values = graphPar$colours, name=graphPar$guide.label)
     }
   } else {
-      scf <- scale_fill_continuous(low = graphPar$low, high = graphPar$high, name=guide.label)
+      scf <- scale_fill_continuous(low = graphPar$low, high = graphPar$high, name=graphPar$guide.label)
   }
   
   return(out+scf)

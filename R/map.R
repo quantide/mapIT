@@ -6,17 +6,17 @@
 #' 
 #' @name map
 #' 
-#' @param region The region for which the map should be drawn (currently only 'Italy')
-#' @param ... Arguments for the calle dfunction
+#' @param area The geographical area for which the map should be drawn (currently only 'Italy')
+#' @param ... Arguments for the called function
 #' 
 #' @return NULL
 #' 
 #' @author Nicola Sturaro
 
-map <- function(region = "Italy", ...) {
-  if(tolower(region) %in% c("it", "italy", "italia")) {
+map <- function(..., area = "Italy") {
+  if(tolower(area) %in% c("it", "italy", "italia")) {
     mapIT(...)
   } else {
-    stop("region actually support only 'Italy'.")
+    stop("area actually support only 'Italy'.")
   }
 }
