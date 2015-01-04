@@ -4,35 +4,40 @@
 \title{Choropleth Maps of Italy}
 \usage{
 mapIT(values, id, data, detail = "regions", dataSource = "istat",
-  sub = NULL, discrete = NULL, graphPar = list(guide.label = NULL, title =
-  NULL, low = "#f0f0f0", high = "#005096", palette = "BuGn", colours = NULL,
-  theme = theme_minimal(), themeOption = list(title = element_text(size = 18),
+  sub = NULL, show_missing = TRUE, show_na = TRUE, discrete = NULL,
+  graphPar = list(guide.label = NULL, title = NULL, low = "#f0f0f0", high =
+  "#005096", na_color = "#333333", palette = "BuGn", colours = NULL, theme =
+  theme_minimal(), themeOption = list(title = element_text(size = 18),
   axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y =
   element_blank()), borderCol = "black", show_guide = TRUE))
 }
 \arguments{
-\item{values}{Vettore numerico contenente i valori da associare a ciascuna regione. Puo' essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}.}
+\item{values}{Vettore numerico contenente i valori da associare a ciascuna regione. Può essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}.}
 
-\item{id}{Vettore contenente i nomi delle regioni a cui associare i valori di \code{values}. Spazi e altri caratteri non alfabetici vengono ignorati. Questo significa che si puo' scrivere indifferentemente: 'Trentino-Alto Adige', 'Trentino Alto Adige' o 'TrentinoAltoAdige'. E' indifferente usare lettere maiuscole o minuscole. Per le regioni con denominazione bilingue, viene riconosciuta la sola dicitura in italiano. Puo' essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}. Se \code{id} e' mancante, i valori contenuti in \code{values} sono associati alle regioni nel seguente ordine: Piemonte, Valle d'Aosta, Lombardia, Trentino-Alto Adige, Veneto, Friuli-Venezia Giulia, Liguria, Emilia-Romagna, Toscana, Umbria, Marche, Lazio, Abruzzo, Molise, Campania, Puglia, Basilicata, Calabria, Sicilia, Sardegna.}
+\item{id}{Vettore contenente i nomi delle aree geografiche a cui associare i valori di \code{values}. Spazi e altri caratteri non alfabetici vengono ignorati. Questo significa che si può scrivere indifferentemente: 'Trentino-Alto Adige', 'Trentino Alto Adige' o 'TrentinoAltoAdige'. E' indifferente usare lettere maiuscole o minuscole. Per le localit con denominazione bilingue, viene riconosciuta la sola dicitura in italiano. Può essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}. Per ulteriori informazioni, si vedano i dettagli.}
 
-\item{data}{Specifica il data.frame in cui sono contenuti \code{values} e \code{id}. Puo' essere omesso nel caso in cui \code{values} e \code{id} siano due vettori.}
+\item{data}{Specifica il data.frame in cui sono contenuti \code{values} e \code{id}. Può essere omesso nel caso in cui \code{values} e \code{id} siano due vettori.}
 
-\item{detail}{Dettaglio con cui disegnare la mappa. Aggiunto per future estensioni, attualmente l'unico valore ammesso e' quello di default, '\code{regions}'. Valori diversi vengono ignorati.}
+\item{detail}{Dettaglio con cui disegnare la mappa. Aggiunto per future estensioni, attualmente l'unico valore ammesso è quello di default, '\code{regions}'. Valori diversi vengono ignorati.}
 
-\item{dataSource}{Fonte dei dati. Se uguale ad '\code{istat}' (default), vengono usati i dati forniti dall'iSTAT e contenuti nel package. Altrimenti un data.frame con la stessa struttura dei dati iSTAT puo' essere utilizzato.}
+\item{dataSource}{Fonte dei dati. Se uguale a '\code{istat}' (default), vengono usati i dati forniti dall'Istat e contenuti nel package. Altrimenti un data.frame con la stessa struttura dei dati Istat può essere utilizzato.}
 
-\item{sub}{Consente di produrre una mappa di alcune aree selezionate e non di tutta l'Italia.}
+\item{sub}{Vettore contenente i nomi delle aree geografiche da mostrare nella mappa. Consente di produrre una mappa di alcune aree e non di tutta l'Italia.}
+
+\item{show_missing}{Se TRUE (default) mostra anche le aree geografiche per cui non ci sono dati. Se FALSE, invece, le aree geografiche per cui non ci sono dati non vengono mostrate.}
+
+\item{show_na}{Correntemente non implementato. Per sviluppi futuri.}
 
 \item{discrete}{Considera valori numerici come fattori.}
 
 \item{graphPar}{\describe{
   Lista contenente i seguenti parametri grafici:
-
   \item{\code{guide.label}}{Una stringa contenente un'etichetta per i dati. Se mancante, il nome dell'oggetto contenente i valori \code{values} viene utilizzato.}
-  \item{\code{title}}{Titolo del grafico. Se nullo (default), nessun titolo sara' visualizzato.}
-  \item{\code{low}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' basso. (default: #F0F0F0)}
-  \item{\code{high}}{solo se \code{values} assume valori continui, colore da assegnare alle regioni con valore di \code{values} piu' alto. (default: #005096)}
-  \item{\code{palette}}{solo se \code{values} assume valori discreti, tipo di palette RColorBrewer da utilizzare. Viene ignorato se \code{colours} non e' nullo. Per visualizzare tutte le palette disponibili, e' possibile utilizzare il comando \code{RColorBrewer::display.brewer.all()}  (default: 'BuGn')}
+  \item{\code{title}}{Titolo del grafico. Se nullo (default), nessun titolo sarà visualizzato.}
+  \item{\code{low}}{solo se \code{values} assume valori continui, colore da assegnare alle aree geografiche con valore di \code{values} più basso. (default: #F0F0F0)}
+  \item{\code{high}}{solo se \code{values} assume valori continui, colore da assegnare alle aree geografiche con valore di \code{values} più alto. (default: #005096)}
+  \item{\code{na_color}}{solo se \code{values} assume valori continui, colore da assegnare alle aree geografiche il cui valore è mancante. (default: #333333)}
+  \item{\code{palette}}{solo se \code{values} assume valori discreti, tipo di palette RColorBrewer da utilizzare. Viene ignorato se \code{colours} non è nullo. Per visualizzare tutte le palette disponibili, è possibile utilizzare il comando \code{RColorBrewer::display.brewer.all()}  (default: 'BuGn')}
   \item{\code{colours}}{solo se \code{values} assume valori discreti, colore da associare a ciascun valore di 'values'. Se nullo (default), viene ignorato e utilizzata una palette.}
   \item{\code{theme}}{tema ggplot2 da utilizzare. (default: \code{\link{theme_minimal}()})}
   \item{\code{themeOption}}{lista contenente le seguenti impostazioni relative al tema: \code{title}, \code{axis.ticks}, \code{axis.text.x}, \code{axis.text.y}. Per informazioni sul significato si veda \code{\link{theme}}.}
@@ -46,6 +51,9 @@ A ggplot class object
 \description{
 Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 }
+\details{
+Se \code{id} è mancante, i valori contenuti in \code{values} sono associati alle regioni nel seguente ordine: Piemonte, Valle d'Aosta, Lombardia, Trentino-Alto Adige, Veneto, Friuli-Venezia Giulia, Liguria, Emilia-Romagna, Toscana, Umbria, Marche, Lazio, Abruzzo, Molise, Campania, Puglia, Basilicata, Calabria, Sicilia, Sardegna.
+}
 \examples{
 ### utilizza dati continui
   values = runif(20, min = 0, max = 1000)
@@ -53,11 +61,8 @@ Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
   # funzione minimale per creare la mappa
   mapIT(values = values)
 
-  # crea una mappa per la sola area centro-settentrionale:
-  mapIT(values,sub=0:12)
-
   # crea id regionali
-  # e' indifferente usare maiuscole e minuscole
+  # è indifferente usare maiuscole e minuscole
   # i caratteri quali trattini e apostrofi posso essere ignorati
   id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'LiGURiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 
@@ -79,7 +84,7 @@ Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
   # utilizzando i set di colori predefiniti, si ottiene un risultato migliore
   mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(palette = "Dark2"))
 
-  # modificando i dati affinche' le macroaree siano un fattore ordinato, si ottiene una legenda e una colorazione piu' coerente
+  # modificando i dati affinché le macroaree siano un fattore ordinato, si ottiene una legenda e una colorazione più coerente
   values = factor(values, levels = c("Nord-Ovest", "Nord-Est", "Centro", "Sud", "Isole"), ordered = TRUE)
   mapIT(values = values, id = id, guide.label = "Aree geografiche")
 }

@@ -1,8 +1,8 @@
-#' Easier choropleth maps
+#' Easier Choropleth Maps
 #' 
 #' @export
 #' 
-#' @title Easier choropleth maps
+#' @title Easier Choropleth Maps
 #' 
 #' @name map
 #' 
