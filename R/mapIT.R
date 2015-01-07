@@ -28,6 +28,7 @@
 #'   \item{\code{theme}}{tema ggplot2 da utilizzare. (default: \code{\link{theme_minimal}()})}
 #'   \item{\code{themeOption}}{lista contenente le seguenti impostazioni relative al tema: \code{title}, \code{axis.ticks}, \code{axis.text.x}, \code{axis.text.y}. Per informazioni sul significato si veda \code{\link{theme}}.}
 #'   \item{\code{borderCol}}{colore per i confini delle diverse aree. (default: '\code{black}')}
+#'   \item{\code{show_grid}}{Se TRUE (default), mostra la griglia di sfondo. Se FALSE, la griglia di sfondo non viene visualizzata. Questo parametro viene ignorato se un \code{theme} viene specificato. }
 #'   \item{\code{show_guide}}{correntemente ignorato. Per future estensioni.}
 #' }
 #'
@@ -86,10 +87,11 @@ mapIT <- function(
       title = element_text(size = 18), axis.ticks = element_blank(),
       axis.text.x = element_blank(), axis.text.y = element_blank()
     ),
-    borderCol = "black", show_guide = TRUE
+    borderCol = "black", show_grid = TRUE, show_guide = TRUE
   )
 ) {
 
+  
   ### Check inputs
   if(missing(id)) {
     warning("id not provided. values assigned by order")
@@ -133,7 +135,7 @@ mapIT <- function(
   onlyChar <- function(string) {
     tolower(gsub(" ", "", gsub("[^[:alnum:]]", " ", string)))
   }
-  
+
   ### Update lists elements (and keep default when argument is not passed)
   listDefTO = eval(formals(mapIT)$graphPar$themeOption)
   if(!is.null(graphPar$themeOption)) {listDefTO[sort(names(listDefTO[sort(names(listDefTO)) %in% sort(names(graphPar$themeOption))]))] = graphPar$themeOption[sort(names(graphPar$themeOption))]}
@@ -148,6 +150,17 @@ mapIT <- function(
   
   ### If the label for the legend is not specified
   if(is.null(graphPar$guide.label)) graphPar$guide.label <- deparse(substitute(values))
+  
+  ### If guide.label contains $, keep the second part
+  if(grepl("\\$", graphPar$guide.label)) {
+    graphPar$guide.label <- unlist(strsplit(graphPar$guide.label, "\\$"))[2]
+  }
+  
+  ### If show_grid is FALSE then hide grid
+  if(graphPar$show_grid == FALSE & identical(graphPar$theme, theme_minimal())) {
+    graphPar$theme$panel.grid.major <- element_blank()
+    graphPar$theme$panel.grid.minor <- element_blank()
+  }
   
   ### If data exists then search values and id as data columns
   if(!missing(data)) {
@@ -169,11 +182,6 @@ mapIT <- function(
   ### If data argument is not specified
   if(missing(data)) {
     assign("data", data.frame(values,id))
-  }
-  
-  ### If guide.label contains $, keep the second part
-  if(grepl("\\$", graphPar$guide.label)) {
-    graphPar$guide.label <- unlist(strsplit(graphPar$guide.label, "\\$"))[2]
   }
   
   ### If dataSource is a dataframe use it
@@ -234,6 +242,7 @@ mapIT <- function(
 
   ### Add values to shape data
   shapedata[, "values"] <- values[pos]
+  
   
   ### Plot building
   gp <- ggplot(shapedata, aes_string(x = "long", y = "lat"))

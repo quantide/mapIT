@@ -9,7 +9,7 @@ mapIT(values, id, data, detail = "regions", dataSource = "istat",
   "#005096", na_color = "#333333", palette = "BuGn", colours = NULL, theme =
   theme_minimal(), themeOption = list(title = element_text(size = 18),
   axis.ticks = element_blank(), axis.text.x = element_blank(), axis.text.y =
-  element_blank()), borderCol = "black", show_guide = TRUE))
+  element_blank()), borderCol = "black", show_grid = TRUE, show_guide = TRUE))
 }
 \arguments{
 \item{values}{Vettore numerico contenente i valori da associare a ciascuna regione. Può essere indicato un oggetto di tipo vettore oppure una stringa indicante la colonna del data.frame specificato in \code{data}.}
@@ -42,6 +42,7 @@ mapIT(values, id, data, detail = "regions", dataSource = "istat",
   \item{\code{theme}}{tema ggplot2 da utilizzare. (default: \code{\link{theme_minimal}()})}
   \item{\code{themeOption}}{lista contenente le seguenti impostazioni relative al tema: \code{title}, \code{axis.ticks}, \code{axis.text.x}, \code{axis.text.y}. Per informazioni sul significato si veda \code{\link{theme}}.}
   \item{\code{borderCol}}{colore per i confini delle diverse aree. (default: '\code{black}')}
+  \item{\code{show_grid}}{Se TRUE (default), mostra la griglia di sfondo. Se FALSE, la griglia di sfondo non viene visualizzata. Questo parametro viene ignorato se un \code{theme} viene specificato. }
   \item{\code{show_guide}}{correntemente ignorato. Per future estensioni.}
 }}
 }
