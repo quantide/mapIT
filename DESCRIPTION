@@ -1,8 +1,8 @@
 Package: mapIT
 Type: Package
 Title: Maps of Italy
-Version: 0.1.10
-Date: 2015-01-07
+Version: 0.1.11
+Date: 2015-01-20
 Author: Nicola Sturaro Sommacal [aut, cre], Davide Massidda [aut]
 Maintainer: Nicola Sturaro Sommacal <nicola.sturaro@quantide.com>
 Description: Creazione di mappe delle regioni italiane in maniera semplice.
