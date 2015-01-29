@@ -96,8 +96,10 @@ mapIT <- function(
   if(missing(id)) {
     warning("id not provided. values assigned by order")
   }
-  if(!missing(id) & !is.character(id)) {
-    stop("id must be a vector of strings otherwise it can be missing and values are assigned by order")
+  if(!missing(id)) {
+    if(!is.character(id))
+      id <- as.character(id)
+    warning("id converted to character. Pay attention that id must be a vector\nof strings otherwise it can be missing and values are assigned by order")
   }
   if(detail != "regions") {
     warning("the argument 'detail' is currently ignored")
@@ -165,11 +167,17 @@ mapIT <- function(
   ### If data exists then search values and id as data columns
   if(!missing(data)) {
     values <- data[,deparse(substitute(values))]
-    if(!missing(id)) id <- data[,deparse(substitute(id))]
+    if(!missing(id)) {
+      id <- data[,deparse(substitute(id))]
+    } else {
+      id <- 0:(length(values)-1)
+    }
+  } else {
+      ### If id is missing then assign numbers from 0
+      if(missing(id)) {id <- 0:(length(values)-1)}
+      ### If data argument is not specified
+      assign("data", data.frame(values,id))
   }
-  
-  ### If id is missing then assign numbers from 0
-  if(missing(id)) {id <- 0:(length(values)-1)}
   
   ### Transform values to factor
   if(is.numeric(values)) {
@@ -177,11 +185,6 @@ mapIT <- function(
   } else {
     discrete <- TRUE
     values <- as.factor(values)
-  }
-  
-  ### If data argument is not specified
-  if(missing(data)) {
-    assign("data", data.frame(values,id))
   }
   
   ### If dataSource is a dataframe use it
