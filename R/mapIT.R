@@ -91,14 +91,34 @@ mapIT <- function(
   )
 ) {
 
+  ### If the label for the legend is not specified
+  ### (the label assignment to guide.label must be done before the manipulation of 'values')
+  if(is.null(graphPar$guide.label)) graphPar$guide.label <- deparse(substitute(values))
   
-  ### Check inputs
-  if(missing(id)) {
-    warning("id not provided. values assigned by order")
+  ### Check inputed data
+  ### If data exists then search values as data columns
+  if(!missing(data)) values <- data[,deparse(substitute(values))]
+  ### If missing exists...
+  if(!missing(id)) {
+    if(!missing(data)) {
+      ### ...if data exists then search id as data columns
+      id <- data[,deparse(substitute(id))]
+    } else {
+      ### ...if data is missing then assign numbers from 0
+      id <- 0:(length(values)-1)
+      warning("id not provided. Values assigned by order")
+    }
   }
-  if(!missing(id) & !is.character(id)) {
-    stop("id must be a vector of strings otherwise it can be missing and values are assigned by order")
+  if(is.factor(id)) id <- as.character(id)
+  
+  ### Transform values to factor
+  if(is.numeric(values)) {
+    discrete <- FALSE
+  } else {
+    discrete <- TRUE
+    values <- as.factor(values)
   }
+  
   if(detail != "regions") {
     warning("the argument 'detail' is currently ignored")
     detail <- "regions"
@@ -148,40 +168,10 @@ mapIT <- function(
   
   rm(listDef, listDefTO)
   
-  ### If the label for the legend is not specified
-  if(is.null(graphPar$guide.label)) graphPar$guide.label <- deparse(substitute(values))
-  
-  ### If guide.label contains $, keep the second part
-  if(grepl("\\$", graphPar$guide.label)) {
-    graphPar$guide.label <- unlist(strsplit(graphPar$guide.label, "\\$"))[2]
-  }
-  
   ### If show_grid is FALSE then hide grid
   if(graphPar$show_grid == FALSE & identical(graphPar$theme, theme_minimal())) {
     graphPar$theme$panel.grid.major <- element_blank()
     graphPar$theme$panel.grid.minor <- element_blank()
-  }
-  
-  ### If data exists then search values and id as data columns
-  if(!missing(data)) {
-    values <- data[,deparse(substitute(values))]
-    if(!missing(id)) id <- data[,deparse(substitute(id))]
-  }
-  
-  ### If id is missing then assign numbers from 0
-  if(missing(id)) {id <- 0:(length(values)-1)}
-  
-  ### Transform values to factor
-  if(is.numeric(values)) {
-    discrete <- FALSE
-  } else {
-    discrete <- TRUE
-    values <- as.factor(values)
-  }
-  
-  ### If data argument is not specified
-  if(missing(data)) {
-    assign("data", data.frame(values,id))
   }
   
   ### If dataSource is a dataframe use it
