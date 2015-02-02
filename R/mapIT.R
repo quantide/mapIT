@@ -1,5 +1,6 @@
 #' Creazione di mappe (coroplete) delle regioni italiane in maniera semplice.
 #' 
+#' 
 #' @export
 #' @import ggplot2
 #' 
