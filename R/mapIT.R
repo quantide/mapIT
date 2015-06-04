@@ -89,7 +89,8 @@ mapIT <- function(
       axis.text.x = element_blank(), axis.text.y = element_blank()
     ),
     borderCol = "black", show_grid = TRUE, show_guide = TRUE
-  )
+  ),
+  ...
 ) {
 
   ### If the label for the legend is not specified
@@ -104,11 +105,11 @@ mapIT <- function(
     if(!missing(data)) {
       ### ...if data exists then search id as data columns
       id <- data[,deparse(substitute(id))]
-    } else {
-      ### ...if data is missing then assign numbers from 0
-      id <- 0:(length(values)-1)
-      warning("id not provided. Values assigned by order")
     }
+  } else {
+    ### ...if data is missing then assign numbers from 0
+    id <- 0:(length(values)-1)
+    warning("id not provided. Values assigned by order")
   }
   if(is.factor(id)) id <- as.character(id)
   
