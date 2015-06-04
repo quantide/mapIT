@@ -54,27 +54,27 @@
 #'   id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'LiGURiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 #'   
 #'   # crea la mappa
-#'   mapIT(values = values, id = id, guide.label = "Valori")
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Valori"))
 #'   
 #'   # modifica i colori
-#'   mapIT(values = values, id = id, guide.label = "Valori", graphPar = list(low = "#00ff00", high = "#ff0000"))
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Valori", low = "#00ff00", high = "#ff0000"))
 #'   
 #'   ### utilizza dati categoriali
 #'   values = c(rep("Nord-Ovest", 4), rep("Nord-Est", 4), rep("Centro", 4), rep("Sud", 6), rep("Isole", 2))
 #'   id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'LiGURiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 #'   
 #'   # funzione minimale per creare la mappa
-#'   mapIT(values = values, id = id, guide.label = "Valori")
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Valori"))
 #'   
 #    # aggiungi i colori alle mappe
-#'   mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(colours = c("red", "darkblue", "green", "yellow", "purple")))
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Aree geografiche", colours = c("red", "darkblue", "green", "yellow", "purple")))
 #'   
 #'   # utilizzando i set di colori predefiniti, si ottiene un risultato migliore
-#'   mapIT(values = values, id = id, guide.label = "Aree geografiche", graphPar = list(palette = "Dark2"))
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Aree geografiche", palette = "Dark2"))
 #'   
 #'   # modificando i dati affinché le macroaree siano un fattore ordinato, si ottiene una legenda e una colorazione più coerente
 #'   values = factor(values, levels = c("Nord-Ovest", "Nord-Est", "Centro", "Sud", "Isole"), ordered = TRUE)
-#'   mapIT(values = values, id = id, guide.label = "Aree geografiche")
+#'   mapIT(values = values, id = id, graphPar = list(guide.label = "Aree geografiche"))
 
 
 mapIT <- function(
@@ -95,7 +95,12 @@ mapIT <- function(
 
   ### If the label for the legend is not specified
   ### (the label assignment to guide.label must be done before the manipulation of 'values')
-  if(is.null(graphPar$guide.label)) graphPar$guide.label <- deparse(substitute(values))
+  if(is.null(graphPar$guide.label)) {
+    graphPar$guide.label <- deparse(substitute(values))
+    graphPar$guide.label <- strsplit(graphPar$guide.label,"\\$")[[1]]
+    if(length(graphPar$guide.label) == 2)
+      graphPar$guide.label <- graphPar$guide.label[2]
+  }
   
   ### Check inputed data
   ### If data exists then search values as data columns
