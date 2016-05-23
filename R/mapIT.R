@@ -50,7 +50,7 @@
 #'   
 #'   # crea id regionali
 #'   # è indifferente usare maiuscole e minuscole
-#'   # i caratteri quali trattini e apostrofi posso essere ignorati
+#'   # i caratteri quali trattini e apostrofi possono essere ignorati
 #'   id = c('Piemonte', 'VALLE DAOSTA', 'lOMBARDiA', 'Trentino Alto Adige', 'VENETO', 'FRiULi - VENEZiA GiULiA', 'LiGURiA', 'EMiLiAROMAGNA', 'TOSCANA', 'UMBRiA', 'MARCHE', 'LAZiO', 'ABRUZZO', 'MOLiSE', 'CAMPANiA', 'PUGLiA', 'BASiLiCATA', 'CALABRiA', 'SiCiLiA', 'SARDEGNA')
 #'   
 #'   # crea la mappa
